@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- 
+
+객체의 생성과 조립(주입)
+
+java코드로 치면
+		
+		- 생성자를 통해서 주입
+		MessageBeanImpl messagebean = new MessageBeanImpl("hong");
+		
+		- setter를 통해서 주입
+		messagebean.setGreeting("hello");
+ -->
+ 
+ <!-- DI문법으로 bean id="식별자"(한 개의 이름) name="여러개의 이름 >> 구분자( ,    공백    ; )" -->
+<bean id="messagebean" name="m1,m2 m3;m4" class="DI_04_Spring.MessageBeanImpl">
+
+<!-- 이 안에  new MessageBeanImpl("hong");의 파라미터를 지정하는 코드를 작성할 수 있다-->
+	
+	<!-- 생성자를 부르는 코드
+	<constructor-arg>
+		<value>hong</value>
+	</constructor-arg> -->
+	
+	<!-- 이 property는 setter함수를 지칭한다
+	여기서 name은 setter함수의 멤버필드명을 적는 것이다
+	<property name="greeting">
+		<value>hello</value>
+	</property> -->
+	
+	
+	
+	
+	<!-- 조금 더 짧게 가능 -->
+	<constructor-arg value="hong" />
+	<property name="greeting" value="hello" />
+
+</bean>
+
+</beans>

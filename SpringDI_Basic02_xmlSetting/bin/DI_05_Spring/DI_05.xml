@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- 
+
+객체의 생성과 조립(주입)
+
+	* Spring은 자신만의 컨테이너를 제공받는다(컨테이너 == Spring 전용 메모리 공간)
+		그 안에 xml이나 Annotaion을 통해서 객체의 생성과 조립을 수행합니다(객체간의 관계 설정)
+	ApplicationContext context =... 이렇게 하면 컨테이너가 실행되고
+	DI_05.xml 문서를 read해서 안에 있는 코드를 실행한다(객체 생성과 의존 설정)
+	
+	context(컨테이너) 안에서 필요한 자원(객체)를 불러서 사용한다 -> getBean
+	
+	이러한 과정을 제어권의 역전이라고 부른다
+	왜냐하면 프로그램의 제어권이 개발자에서 Spring에게로 넘어갔기 때문이다	
+	->작은 단위의 부품을 만들어놓고 그것들을 조립하는 행위 이것이 Spring이 추구하는 것이다
+	https://cafe.naver.com/bit2021/952 참조
+	
+	java코드:
+	
+		MyBean mybean = new MyBean();
+		MyBean mybean2 = new MyBean("hong");
+		MyBean mybean3 = new MyBean();
+		
+		
+		Singleton single = Singleton.getInstance();
+		Singleton single2 = Singleton.getInstance();
+ -->
+	
+	<bean id="mybean" class="DI_05_Spring.MyBean"></bean>
+	<bean id="mybean2" class="DI_05_Spring.MyBean">
+   			<constructor-arg  value="hong" />
+   	</bean>
+   	<!-- bean 하나가 하나의 객체다 getBean은 new를 하지 않지만 위처럼 하면 mybean과 mybean2는 서로 다른 객체가 된다 -->
+ 	
+ 	<!-- 싱글톤 만들어보기 -->
+ 	<bean id="single" class="DI_05_Spring.Singleton" factory-method="getInstance" />
+ 	<!-- 원래 3.~~~ 버전까지는 factory-method="getInstance" 가 강제사항이었지만
+ 	4.~~~~ 버전부터는 생략할 수 있게 되었다 -->
+ 
+</beans>

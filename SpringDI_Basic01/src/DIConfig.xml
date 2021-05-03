@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   http://www.springframework.org/schema/beans/spring-beans.xsd">
+<!--  
+Spring 자신만의 [컨테이너(Spring 전용 메모리 공간)] 제공 (IOC) 안에 
+[객체를 만들고 조립(관계...의존성)] 설정
+
+>>DIConfig.xml 문서를  read 해서 ....안에 있는 코드 먼저 실행
+>>xml 파일 은 컨테이너를 구성하는 [객체를 생성]하고 [의존]을 설정하는 파일
+또는  Annotation 통해서 컨테이너 자원 구성
+
+:제어의 역전 (프로그램의 제어구조를 바꾼다) ==Inversion Of Control
+:작은 단위의 부품을 만들어 놓고 그 것을 조립하는 행위 (레고 블럭 처럼)
+
+		>>java code main 함수 객체 생성 주입 코드		
+		NewRecordView view = new NewRecordView();
+		NewRecord record = new NewRecord();
+		
+		view.setRecord(record);
+		
+		위와 같은 코드를 자바코드가 아닌 [설정]을 통해서 구현
+		-xml 또는 Annotation을 통해서 구현 
+-->
+
+<!-- 이렇게 하면 bean이라는 요소가 Spring container에 NewRecord라는 객체를 만든다 -->
+<bean class="Spring_DI4.NewRecord" id="record"></bean>
+<!-- 자바코드로 치면 NewRecord record = new NewRecord() -->
+
+<bean class="Spring_DI4.NewRecordView" id="view">
+	<!-- property의 name은 setter함수를 구현하고 있는 memeberfield명을 작성하면 된다 -->
+	
+	<!-- ref는 참조한다는 것 즉 주입받은 것을 ref에 작성한다 -->
+	<property name="record" ref="record"></property> <!-- 자동으로 setter 동작 -->
+	<!-- 위 코드는 java코드로 치면 이것과 같다 view.setRecord(record); -->
+	
+</bean>
+</beans>
+
+<!-- 
+	xml은 태그를 마음대로 만들 수 있지만 여기의 beans는 정해진 태그다
+	앞으로 객체 대신 bean이라는 용어를 사용하자
+	beans는 bean들을 가지고 있다는 뜻이다
+	
+ -->

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- 
+
+객체의 생성과 조립(주입)
+
+java코드로 치면 MessaeBean
+ -->
+ <bean id="messagebean" class="DI_03_Spring.MessageBean_kr"></bean>
+</beans>

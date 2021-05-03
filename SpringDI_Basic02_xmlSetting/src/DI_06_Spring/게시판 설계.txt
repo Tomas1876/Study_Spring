@@ -1,0 +1,20 @@
+MVC 게시판 설계
+
+Model(dto, dao, service)
+
+View(jsp)
+
+Controller(servlet)
+
+클라이언트 요청이 발생 > Controller > Service > dao, dto > Service > Controller > View > 응답
+
+위까지 개발했을 때, 요구사항이 들어왔다고 가정해보자
+-DB를 2가지 이상 사용하기를 원한다 Oracle, MySql
+모든 DB는 Article이라는 동일한 테이블을 가지고 있다 이때
+Model
+1. dto - Article
+2. dao - ArticleDao(DB연결, CRUD) -> 인터페이스 기반으로 설계(함수를 강제하기 위해 추상자원으로)
+	2-1. ArticleDao 인터페이스 구현 - OracleDao
+							    - MySqlDao
+3. Service에서 dao 생성함수 호출
+	- service는 
