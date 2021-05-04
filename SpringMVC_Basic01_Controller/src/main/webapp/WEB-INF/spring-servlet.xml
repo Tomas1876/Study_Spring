@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+	
+<!-- 
+	tomcat 실행 -> 클라이언트 요청(ex: list.do) -> Spring (DispatcherServlet) 생성 -> key IOC 컨테이너 자동 생성
+	-> spring-servlet.xml을 읽어서(파일명은 *-servlet.xml 이어야 한다) -> 컨테이너 안에 bean 객체가 생성되고 주입이 일어난다
+	**만약에 요청된 주소가 hello.do라면 handler mapping이 일어난다(객체가 가진 id값으로 맵핑하는 것)
+	-> 실행할 controller를 찾고 실행한다
+		여기서 말하는 '실행'이란 controller가 갖고 있는 handleRequest 함수를 자동실행하는 것
+		->그 결과를 ViewResolver 에 전달하고 view를 처리한다
+ -->
+ 
+	<bean id="/hello.do" class="kr.or.bit.HelloController"></bean>
+	<bean id="/intro.do" class="kr.or.bit.IntroController"></bean>
+	
+	<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	
+		<property name="prefix">
+			<value>/WEB-INF/views/</value>
+		</property>
+		<property name="suffix">
+			<value>.jsp</value>
+		</property>
+	
+	</bean>
+</beans> 
+
+
+
+

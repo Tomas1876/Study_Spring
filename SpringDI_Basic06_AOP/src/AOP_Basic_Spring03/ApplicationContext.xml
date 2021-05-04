@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+	
+<!-- 
+	//1. 실객체의 주소
+		Calc calc = new NewCalc();
+		
+		//2. 가짜를 생성
+		Calc cal = (Calc)Proxy.newProxyInstance(calc.getClass().getClassLoader(), //실객체의 메타 정보(내부)
+							calc.getClass().getInterfaces(), //실객체의 행위정보(인터페이스)
+							new LogPrintHandler(calc)); //보조객체의 정보
+
+ -->
+ 
+	  <bean  id="calc" class="AOP_Basic_Spring03.NewCalc"></bean>
+	  <bean  id="logPrintAroundAdvice" class="AOP_Basic_Spring03.LogPrintAroundAdvice"></bean>
+	  <!-- 프록시 객체는 spring이 제공한다 -->
+	  <bean  id="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+ 	 		<property name="proxyInterfaces">
+ 			<list> <!-- 여러 개의 행위정보를 가질 수 있기 때문에 list 사용 -->
+ 				<value>AOP_Basic_Spring03.Calc</value> <!-- 패키지 하위의 인터페이스 이름 -->
+ 			</list>
+ 		</property> <!-- 행위 정보(어떤 함수를 갖고 있는지) -->
+ 		<property name="target" ref="calc"></property><!-- 실객체의 주소 target -->
+ 		<property name="interceptorNames">
+ 			<list> <!-- 보조 업무 즉 어드바이스를 가진 객체의 목록 -->
+ 				<value>logPrintAroundAdvice</value>
+ 			</list>
+ 		</property><!-- 보조프로그래밍(중간에 가로채는 것), 보조객체 -->
+ 	</bean>
+</beans> 
+
+
+
+
