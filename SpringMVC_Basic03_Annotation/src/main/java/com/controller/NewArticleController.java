@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -77,5 +78,59 @@ public class NewArticleController {
 	}
 	*/
 	
+	/*
+	//Spring에서 Parameter를 DTO 객체로 받기
+	//자동화(input name값이 DTO객체의 member field명과 동일하다는 것을 전제로 한다)
+	@RequestMapping(method=RequestMethod.POST) //insert 처리
+	public ModelAndView submit(NewArticleCommand command) {
+		//함수의 parameter로 request객체가 아니라 DTO객체를 받는다면
+		
+		
+		//1. 자동으로 DTO객체 생성
+		//NewArticleCommand article = new NewArticleCommand();
+		
+		//2. 넘엉노 parameter 값이 setter 통해서 자동으로 주입됨
+		//article.setParentId(Integer.parseInt(request.getParameter("parentId")));
+		//article.setTitle(request.getParameter("title"));
+		//article.setContent(request.getParameter("content"));
+		
+		//3. NewArticleCommand객체가 IOC 컨테이너 안에 자동생성
+		// -> id값이 자동으로 생성 newArticleCommand
+				
+		//NewArticleController가 service를 필요로 한다
+		//->NewArticleController가 service를 주입받겠다
+		this.articleService.writeArticle(command);
+		
+		
+		//처리하고 나서 다시 제어권이 넘어온다
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("newArticleCommand",command);
+		mv.setViewName("article/newArticleSubmitted");
+		
+		return mv;
+	}
+	*/
+	
+	@RequestMapping(method=RequestMethod.POST) //insert 처리
+	public String submit(@ModelAttribute("Articledata") NewArticleCommand command) {
+			
+		//NewArticleController가 service를 필요로 한다
+		//->NewArticleController가 service를 주입받겠다
+		this.articleService.writeArticle(command);
+		//처리 완료 후
+		//view 페이지가 데이터를 받아야하는데 어떻게?
+		
+		// NewArticleCommand객체가 IOC 컨테이너 안에 자동생성
+		// -> id값이 자동으로 생성 newArticleCommand
+		//그 다음에 자동으로 forward가 일어남
+		//이때 id값이 view단에서 받는 객체의 이름(키값)으로 자동 forward됨
+		//그러니 ModelAndView 객체를 만들 필요가 없다
+		
+		//만약 forward 되는 키의 이름을 자동화하지 않고 직접 정의하고 싶다면
+		//@ModelAttribute() 어노테이션 사용
+		//() 안에 적은 것이 forward되는 객체의 이름이 된다
+		
+		return "article/newArticleSubmitted"; //view단의 주소
+	}
 	
 }

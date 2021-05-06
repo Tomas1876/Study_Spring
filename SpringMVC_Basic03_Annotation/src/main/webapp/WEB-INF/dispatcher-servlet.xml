@@ -55,6 +55,15 @@ Persistence Layer에서 DAO를 명시하기 위해서 사용
 	<!-- 위의 bean 객체는 사실 id가 필요없다 id는 컨테이너 안에서 다른 객체가 이 객체를 injection 할 때나 필요한 것 -->
 	
 	<bean class="com.service.ArticleService"></bean>
+	
+<!-- TEST_3 parameter List<OrderItem> -->
+	<bean class="com.controller.OrderController"></bean>
+	
+<!-- TEST_4 @ReqeustParam -->
+	<bean class="com.controller.SearchController"></bean>
+	
+<!-- TEST_5 @CookieValue-->
+	<bean class="com.controller.CookieController"></bean>	
 </beans> 
 
 
