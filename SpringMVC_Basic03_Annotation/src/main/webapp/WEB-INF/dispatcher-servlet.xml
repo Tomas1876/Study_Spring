@@ -6,7 +6,34 @@
                            http://www.springframework.org/schema/beans/spring-beans.xsd
                            http://www.springframework.org/schema/context 
                            http://www.springframework.org/schema/context/spring-context.xsd">
-	
+                           
+    
+<!-- context:annotation-config 태그는 어노테이션과 관련해서 
+다음의 BeanPostProcessor를 함께 등록 한다.
+- @Required(RequiedAnnotationBeanPostProcessor)
+- @Autowired(AutowiredAnnotationBeanPostProcessor)
+- @Resource, @PostConstruct, @PreDestory(CommonAnnotationBeanPostProcessor)
+- @Configuration(ConfigurationClassPostProcessor) -->
+
+<!-- 자동 빈객체 생성 : <context:component-scan>
+<context:component-scan base-package="com.controller"
+공통빈
+@Controller
+Presentation Layer에서 Contoller를 명시하기 위해서 사용
+​
+@Service
+Business Layer에서 Service를 명시하기 위해서 사용
+​
+@Repository 
+Persistence Layer에서 DAO를 명시하기 위해서 사용
+​
+@Component
+그 외에 자동으로 스캔해서 등록하고 싶은 것들을 위해 사용 -->
+
+		
+	<!-- @Autowired 자동 처리를 빈객체 자동 생성 등록. 만약 아래 처리를 해주지 않으면 주입이 실행되지 않는다-->	
+	<context:annotation-config />
+                           
 	<!-- 공통 bean : 어느 객체나 함께 사용하는 것 -->
 	<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 	
@@ -22,6 +49,12 @@
 <!-- TEST_1 예제에 관련된 bean -->
 	<!-- 이제 controller에서 RequestMapping을 사용하기 때문에 bean의 id는 의미가 없어졌다 -->
 	<bean id="helloController" class="com.controller.HelloController"></bean>
+	
+<!-- TEST_2 하나의 요청 주소를 가지고 두 가지 업무(화면 출력, 서비스)를 처리하는데, 전송방식을 판단근거로 한다 -->
+	<bean id="newArticleController" class="com.controller.NewArticleController"></bean>
+	<!-- 위의 bean 객체는 사실 id가 필요없다 id는 컨테이너 안에서 다른 객체가 이 객체를 injection 할 때나 필요한 것 -->
+	
+	<bean class="com.service.ArticleService"></bean>
 </beans> 
 
 
