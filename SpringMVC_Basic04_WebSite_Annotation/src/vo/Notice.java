@@ -2,6 +2,8 @@ package vo;
 
 import java.util.Date;
 
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
 public class Notice {
 	private String seq;
 	private String title;
@@ -10,6 +12,21 @@ public class Notice {
 	private String fileSrc;
 	private int hit;
 	private String content;
+	
+	// 파일 업로드를 DTO로 받을거양
+	// - 파일 업로드 -
+		private CommonsMultipartFile file; // 업로드한 파일 정보를 담는 변수 -> CommonsMultipartFile
+		// ㄴ 단 조건은 -> <input type="file" name="file"> 이렇게 타입과 네임이 같이가야됨 
+		public CommonsMultipartFile getFile() {
+			return file;
+		}
+		
+		public void setFile(CommonsMultipartFile file) {
+			this.file = file;
+		}
+	
+	
+	
 	
 	public String getFileSrc() {
 		return fileSrc;
