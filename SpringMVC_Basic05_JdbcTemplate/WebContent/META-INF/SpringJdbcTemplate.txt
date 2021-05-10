@@ -17,15 +17,15 @@ create table usermember(
 
 5.SpringMVC > 필수 jar 
 -기본 : core , beans , expression , aop , context ...
--웹   : web , webmvc 
--의존 : logging ....
+-웹   : web , webmvc (Spring JDBC를 이용하기 전에는 이정도만 필요했다)
+-의존 : logging(로그단위의 데이터를 객체단위로 맵핑하는 작업이 필요)
 -jsp  : jstl
 -DB   : ojdbc6.jar
 
 -Spring JDBC : spring-jdbc , spring-tx 추가  > 현실 > ORM (객체 매핑) > JPA , Mybatis
--DB자체가 ORM 구현 >> ORDB > MongoDB (JSON 객체 데이터 저장) > no-sql
+-DB자체가 ORM 구현 >> ORDB(객체 맵핑 DB) > MongoDB (JSON 객체 데이터 저장) > no-sql
 *****
-ContextLoaderListener 와 DispatcherServlet 은 각각 webapplicationcontext 를 생성하는데
+ContextLoaderListener 와 DispatcherServlet 은 각각 webapplicationcontext 를 생성하는데(컨테이너를 생성하는 것)
 ContextLoaderListener 가 생성한 컨텍스트가 root 컨텍스트가 되고 DispatcherServlet 이 생성한 인스턴스는 root 컨텍스트를 부모로 하는 자식 컨텍스트가 된다.
 *****
 *****
