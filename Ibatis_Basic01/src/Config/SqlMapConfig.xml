@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMapConfig
+PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<transactionManager type="JDBC" commitRequired="true">
+		<dataSource type="SIMPLE">
+			<property name="JDBC.Driver" value="oracle.jdbc.driver.OracleDriver"/>
+			<property name="JDBC.ConnectionURL" value="jdbc:oracle:thin:@localhost:1521:XE"/>
+			<property name="JDBC.Username" value="bituser"/>
+			<property name="JDBC.Password" value="1004"/>
+		</dataSource>	
+	</transactionManager>
+	
+	<!--member.xml은 Mapper파일로 실제 실행되는 쿼리문이 들어있다 -->
+	<sqlMap resource="Config/member.xml" />
+</sqlMapConfig>

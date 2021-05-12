@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap>
+	<!--  객체 별칭 -->
+	<typeAlias alias="guest" type="kr.co.mycom.ibatis.guest.GuestDTO"/>
+	
+	<!--  Insert 
+		  parameter > GuestDTO > 
+		  
+		  <insert id="insertGuest" parameterClass="guest">
+			insert into guest(no,name,pwd,email,home,content,regdate)
+			values((select nvl(max(no),0) +1 from guest) ,#name#,#pwd#,#email#,#home#,#content#,sysdate)
+		 </insert>
+		 바로 아래의 insert는 sub쿼리 사용이 편하다면 위의 코드로 대체해도 이상 없다
+	-->
+	<insert id="insertGuest" parameterClass="guest">
+		<selectKey resultClass="java.lang.Integer" keyProperty="no">
+			  select nvl(max(no),0) +1 from guest
+		</selectKey>
+		insert into guest(no,name,pwd,email,home,content,regdate)
+		values(#no#,#name#,#pwd#,#email#,#home#,#content#,sysdate)
+	</insert>
+	
+	<!-- 
+		만약에 DTO 객체 memberfield 명 DB Table 컬럼명이 일치하지 않는다면(사실 이렇게 하면 안된다)
+		resultMap element 사용
+		select elememnt > resultMap 속성을 사용
+	 -->
+	<resultMap class="kr.co.mycom.ibatis.guest.GuestDTO" id="guestResult">
+		 <result property="no" column="no"  />	<!-- select number ....  -->
+		 <result property="name" column="name"  />
+		 <result property="pwd" column="pwd"  />
+		 <result property="email" column="email"  />
+		 <result property="home" column="home"  />
+		 <result property="content" column="content"  />
+		 <result property="regdate" column="regdate"  />
+	</resultMap>
+	
+	<select id="getGuestList"  resultClass="kr.co.mycom.ibatis.guest.GuestDTO">
+		select * from guest order by no desc
+	</select>
+	
+	<!--
+		*** KEY POINT ***
+		 select * from guest where name like '%hong%'
+		 
+		 # [타입]에 대한 처리 : where name=#name# > name='김유신' (DB 쿼리가 실행시 'name')		
+			
+		 
+
+		 parameterClass="String" > #name# > 홍길동 > 결과 : '홍길동'
+		 >where ename like '%#name#%' > '%'홍길동'%'  (x)
+		 
+		 #은 데이터 타입은 알아서 잘 처리해주지만 %연산자는 그냥 처리해주지 못한다
+		 그래서 $ 사용
+		 
+		 $는 있는 그래로 출력(타입 신경 안 쓰고 받은 데이터 그대로 출력) : where name=$name$ > name=김유신 
+		
+		 		 
+		 parameterClass="String" > $name$ > 홍길동 > 결과 : 홍길동
+	     >where ename like '%$name$%' > '%홍길동%'
+	     
+	     >> int >> #a# >> 100
+	     >> String >> #a# >> '100'
+	     
+	     그래서 $는 보통 컬럼명 , 테이블명($컬럼명$) 등에 사용한다 
+	     #컬럼명#을 select 절에 사용하면 select '컬럼명' 이런 식으로 들어가기 때문 이러면 쿼리문 오류난다
+	     select $컬럼명$ 이렇게 작성해야 select 컬럼명 이렇게 ''없이 처리돼 오류가 없다
+	     
+	     
+	     * Mybatis에서는 그냥 #/$ 아니고 #{name}/${name}
+	  -->
+	  <select id="getGuestSearch" resultMap="guestResult">
+	  	select * from guest where name like '%$value$%' 
+	  </select>
+	  
+	  <!-- 참고 
+	  parameterMap 에서 순서를 정의
+	  -->
+	  <parameterMap class="kr.co.mycom.ibatis.guest.GuestDTO" id="paraminsert">
+	  	<parameter property="no"/><!-- 첫번째 ?  -->
+	  	<parameter property="name"/>
+	  	<parameter property="pwd"/>
+	  	<parameter property="email"/>
+	  	<parameter property="home"/>
+	  	<parameter property="content"/>
+	  </parameterMap>
+	  
+	  <!-- 아래처럼 해도 되지만 이렇게 하려면 파라미터 맵을 따로 만들어줘야 하기 때문에 문법은 존재 하지만 굳이 하지 않는다 dto객체를 바로 받으면 되는데 무얼 -->
+	  <select id="insertMapGuest" parameterMap="paraminsert" >
+	  	 insert into guest(no,name,pwd,email,home,content,regdate)
+	  	 values(?,?,?,?,?,?,sysdate)
+	  </select>
+</sqlMap>
+
+
+
+
+
