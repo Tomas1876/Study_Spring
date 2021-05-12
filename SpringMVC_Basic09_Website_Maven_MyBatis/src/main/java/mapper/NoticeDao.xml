@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  
+[key point]
+Mybatis 사용 프로젝트 진행시
+
+1. mapper namespace 이름 : DAO를 가지는 interface 이름을 그대로 사용
+2. <select id="" 이름을  interface를 가지는 함수명과 동일하게
+
+	public int getCount(String field, String query) throws ClassNotFoundException, SQLException;
+
+	public List<Notice> getNotices(int page, String field, String query) throws ClassNotFoundException, SQLException;
+	
+	//게시물 삭제
+	public int delete(String seq) throws ClassNotFoundException, SQLException;
+	
+	//게시물 수정
+	public int update(Notice notice) throws ClassNotFoundException, SQLException;
+	//게시물 상세
+	public Notice getNotice(String seq) throws ClassNotFoundException, SQLException;
+	
+	//게시물 입력
+	public int insert(Notice n) throws ClassNotFoundException, SQLException;
+
+result : interface 와 mapper 있으면 실행
+-->
+
+<mapper namespace="dao.NoticeDao">
+	<!-- 
+		1. parameter가 한 개일 경우 생략하거나, parameterType 이라는 속성을 사용해 명시한다(parameterTypoe="int" 이런식)
+		
+		2. parameter가 dto 객체인 경우 parameterType 사용 parameterType="vo.Notice"
+		
+		3. parameter가 2개 이상인데 dto가 없는 경우
+			3-1. HashMap 사용 : map.put(key1,value2), map.put(key2,value2)
+			3-2. myBatis가 parameter 값을 순서대로 읽을 수 있다. param1, param2, param3...(단 parameter가 한 개뿐일 땐 사용 불가능)
+	-->
+	
+	<!-- public int getCount(String field, String query) 구현하는 select 태그  -->
+	<select id="getCount" resultType="int">
+		SELECT COUNT(*) CNT FROM NOTICES WHERE ${param1} LIKE '%${param2}%'
+	</select>
+	
+	<!--  
+		public List<Notice> getNotices(int page, String field, String query)  
+		param1 > page    param2 > field     param3 > query
+		
+		>>논리와 수식이 필요한 것은  DB에게 맡긴다
+		
+		int srow = 1 + (page-1)*5;
+		int erow = 5 + (page-1)*5; 
+		
+		 ?  >> "%"+query+"%"    >>>   LIKE '%${param3}%' 
+		 ?  >> srow
+		 ?  >> erow
+		-->
+		<select id="getNotices" resultType="vo.Notice">
+				SELECT * FROM
+			             (
+			               SELECT ROWNUM NUM, N.* 
+			               FROM 
+			                  (  SELECT * 
+			                     FROM NOTICES 
+			                     WHERE ${param2} LIKE '%${param3}%' ORDER BY REGDATE DESC
+			                   ) N
+			              )  WHERE NUM BETWEEN 1 + (${param1}-1)*5 AND 5 + (${param1}-1)*5
+		</select>
+		
+		<!-- 게시물 상세 public Notice getNotice(String seq) -->
+		<select id="getNotice" resultType="vo.Notice">
+		
+			SELECT seq,title,writer,content,regdate,hit,filesrc,filesrc2 FROM NOTICES WHERE SEQ=#{seq}
+		
+		</select>
+		
+		<!-- 게시물 삭제	public int delete(String seq) !!삭제는 delete 태그가 따로 있다!!
+			그리고 파라미터나 return타입은 한 개일 경우 생략해도 무방하다
+		-->
+		<delete id="delete">
+		
+			DELETE NOTICES WHERE SEQ=#{seq}
+		
+		</delete>
+		
+		<!-- public int update(Notice notice) -->
+		<update id="update" parameterType="vo.Notice">
+			UPDATE NOTICES 
+				SET TITLE=#{title},
+					CONTENT=#{content},
+					<!-- jdbcType=VARCHAR 파일이 업로드 되지 않을 경우에 대한 처리. 알아서 null을 넣어준다-->
+					FILESRC=#{fileSrc, jdbcType=VARCHAR},
+					FILESRC2=#{fileSrc2, jdbcType=VARCHAR} 
+					WHERE SEQ=#{seq}
+		</update>
+		
+		<!-- public int insert(Notice n) -->
+		<!-- 전통적인 방법
+		<insert id="insert" parameterType="vo.Notice">
+		INSERT INTO NOTICES(SEQ, TITLE, CONTENT, WRITER, REGDATE, HIT, FILESRC , FILESRC2)
+			VALUES( (SELECT MAX(TO_NUMBER(SEQ))+1 FROM NOTICES), #{title}, #{content}, 'bituser', SYSDATE, 0, #{fileSrc, jdbcType=VARCHAR},#{fileSrc2, jdbcType=VARCHAR})
+		</insert>
+		 -->
+		 <!-- 선행쿼리를 사용하는 방법 선행쿼리 실행하고 그 결과값을 받아서 쿼리문의 파라미터로 사용 -->
+		 <insert id="insert" parameterType="vo.Notice">
+		 	<selectKey order="BEFORE" keyProperty="seq" resultType="int">
+		 		SELECT MAX(TO_NUMBER(SEQ))+1 FROM NOTICES
+		 	</selectKey>
+		INSERT INTO NOTICES(SEQ, TITLE, CONTENT, WRITER, REGDATE, HIT, FILESRC , FILESRC2)
+			VALUES(#{seq}, #{title}, #{content}, 'bituser', SYSDATE, 0, #{fileSrc},#{fileSrc2})
+		</insert>
+</mapper>
