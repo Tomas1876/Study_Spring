@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+    
+    <!-- 검사 URL 
+    	 intercept 순서가 곧 우선 순위다 아래쪽에서 권한 허용해줘도 더 우선되는 위에서 막아버리면 접근 불가능하다
+    -->
+    <http use-expressions="true">
+    	
+    	<!-- 모두 접근 허용 로그인 페이지에 이걸 하지 않았다간 아무도 로그인 할 수 없는 사이트가 돼 버린다 access="permitAll"-->
+       <intercept-url pattern="/login/loginForm.do" access="permitAll" />
+       <intercept-url pattern="/home.do" access="permitAll" /> <!-- 첫페이지. 밑에 /**로 모든 페이지의 접근을 다 막아버렸기 때문에 기본 페이지는 접근허용을 명시해주어야 한다  -->
+       <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+       <intercept-url pattern="/**" access="hasAnyRole('ROLE_USER, ROLE_ADMIN')" />
+        
+        <!--  로그인 성공시 url default-target-url
+        	  로그인 실패시 url authentication-failure-url
+        	  
+        	  권한 검사는 인증이 되었다는 것을 전제로 하기 때문에
+        	  미인증 상태일 때는 login-page의 url로 이동한다
+        	  권한이 없는 것과 인증이 되지 않는 것은 다르다
+         -->
+        <form-login login-page="/login/loginForm.do"
+                    default-target-url="/home.do"
+                    authentication-failure-url="/login/loginForm.do?error"
+                    username-parameter="id"
+                    password-parameter="password" />
+        <logout logout-url="/logout"
+                logout-success-url="/home.do" />
+        
+        
+        <!-- 접근 거부됐을 때 이동할 url(403 뜨면 보기 싫으니까) -->        
+        <access-denied-handler error-page="/login/accessDenied.do" />
+    </http>
+    
+    <!--  provider  -->
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="user" password="1004" authorities="ROLE_USER" />
+                <user name="admin" password="1004" authorities="ROLE_ADMIN" />
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+    
+</beans:beans>
