@@ -83,8 +83,10 @@
 사용자의 인증과 권한 처리 설정
 
 -인증받지 않은 일반사용자 (회원이 아닌 사용자 : 로그인 하지 않은 사용자)
--인증받은 일반사용자      (회원인데 : 로그인한 사용자)
+-인증받은 일반사용자      (회원인데 : 로그인한 사용자) - 모든 사용자는 ROLE이 있다는 걸 전제로 한다
 -인증받은 관리자          (회원인데 : 로그인한 사용자 : 관리자(권한))
+
+->>spring security를 사용한다면 ROLE은 필수다
 
 -게시판 (customer > notice.jsp , noticeReg.jsp , noticeDetail.jsp , noticeEdit.jsp
 -게시판 목록(notice.jsp) :  일반사용자(인증 x) : 사이트 접속하는 모든 사용자 (permitAll)
@@ -151,15 +153,15 @@ http://localhost:8090/SpringMVC_Basic03_WebSite_Mybatis_Security/{login}
 <html>
 <head><title>Login Page</title></head>
 <body onload='document.f.username.focus();'>
-<h3>Login with Username and Password</h3>
-<form name='f' action='/SpringMVC_Basic11_Sts_Mybatis_Security/login' method='POST'>
-<table>
-<tr><td>User:</td><td><input type='text' name='username' value=''></td></tr>
-<tr><td>Password:</td><td><input type='password' name='password'/></td></tr>
-<tr><td colspan='2'><input name="submit" type="submit" value="Login"/></td></tr>
-<input name="_csrf" type="hidden" value="9c1dc5ca-048b-4f20-851f-a6ded4ffc26b" />
-</table>
-</form>
+	<h3>Login with Username and Password</h3>
+	<form name='f' action='/SpringMVC_Basic11_Sts_Mybatis_Security/login' method='POST'>
+		<table>
+			<tr><td>User:</td><td><input type='text' name='username' value=''></td></tr>
+			<tr><td>Password:</td><td><input type='password' name='password'/></td></tr>
+			<tr><td colspan='2'><input name="submit" type="submit" value="Login"/></td></tr>
+			<input name="_csrf" type="hidden" value="9c1dc5ca-048b-4f20-851f-a6ded4ffc26b" />
+		</table>
+	</form>
 </body>
 </html>
 
@@ -457,8 +459,8 @@ This content will only be visible to users who are authorized to send requests t
         Table 설계도 Spring Security 원하는 형태로
      1. 컬럼명 강제하기 : USERID , PASSWORD , ENABLED 
           현재 시스템은 : USERID      PWD         x
-     2. 속임수 :
-        SELECT USERID  ,  pwd AS PASSWORD ,  1 enabled FROM member;
+     2. 속임수 : (원래 설계할 때 enabled 컬럼을 추가해야 했지만 없을 경우 있는 것처럼 할 때)
+        SELECT USERID  ,  pwd AS PASSWORD ,  1 enabled FROM member; -> 이렇게 하면 꼭 1이 데이터, enabled가 컬럼명인 것처럼 된다 있지도 않은 데이터를 셀렉트 할 수 있는 것
         사용해야 되는 쿼리는
         SELECT USERID  ,  pwd AS PASSWORD ,  1 enabled 
         FROM member WHERE userid='kglim';
@@ -504,7 +506,7 @@ FROM member WHERE userid=?
   <security:intercept-url pattern="/customer/noticeReg.htm" access="ROLE_ADMIN"/> 
 
  -->   
- 위 코드를 개선 pattern 방식으로 전환
+ 위 코드를 개선 pattern 방식으로 전환(모든 페이지에 매번 권한을 설정할 수는 없으니까!)
  <!-- 
   Pattern 샘플
    <security:intercept-url pattern="/customer/*"  access="ROLE_USER" /> => customer 폴더 모든 파일

@@ -92,11 +92,11 @@
 		/login 요청 처리는 여전히 spring 위임하고 있다 .....
 		기본적인 요청 주소 , parametre 값은 정해진 대로 
  	 
- 	  -->
+ 	 
  	 
  	  	<security:http auto-config="true">
  		<security:csrf disabled="true"/>
- 		<!-- authentication-failure-url : 인즐 실패 url --> 
+ 		 authentication-failure-url : 인증 실패 url  
  		<security:form-login login-page="/joinus/login.htm"						
  							authentication-failure-url="/joinus/login.htm?error" />
  		<security:logout   logout-success-url="/index.htm" />  
@@ -112,6 +112,38 @@
  				
  				<security:user name="admin" password="1004" authorities="ROLE_ADMIN,ROLE_USER"/>
  			</security:user-service>
+ 		</security:authentication-provider>
+ 	</security:authentication-manager>
+ 	 -->
+ 	 
+ 	 
+ 	<!--  -->
+ 	<security:http auto-config="true">
+ 		<security:csrf disabled="true"/>
+ 		<!-- authentication-failure-url : 인증 실패 url 
+ 			default-target-url : 
+ 		--> 
+ 		<security:form-login default-target-url="/index.htm" 
+ 							login-page="/joinus/login.htm"						
+ 							authentication-failure-url="/joinus/login.htm?error" />
+ 		<security:logout   logout-success-url="/index.htm" />  
+ 		  <security:intercept-url pattern="/customer/*Reg.htm" access="hasRole('ROLE_USER')" />
+  		  <security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
+ 	</security:http>
+ 	
+ 	<security:authentication-manager>
+ 		<security:authentication-provider>
+ 		<!-- 이건 in-memory 방식이고 이제 jdbc가 제공하는 db연동을 이용할거니까 주석처리 
+ 			<security:user-service>
+ 				<security:user name="hong" password="1004" authorities="ROLE_USER"/> 				
+ 				<security:user name="admin" password="1004" authorities="ROLE_ADMIN,ROLE_USER"/>
+ 			</security:user-service>-->
+ 			
+ 			<security:jdbc-user-service data-source-ref="driverManagerDataSource"
+ 										users-by-username-query="SELECT userid, pwd AS password, 1 enabled FROM MEMBER WHERE userid=?"
+ 										authorities-by-username-query="SELECT m.userid, r.role_name FROM MEMBER m JOIN roll r ON m.userid=r.userid WHERE m.userid=?" />
+
+ 			
  		</security:authentication-provider>
  	</security:authentication-manager>
  	 

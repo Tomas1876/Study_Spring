@@ -81,9 +81,15 @@
 					<p class="article-comment margin-small">
 						<!--  <a class="btn-write button" href="noticeReg.htm">글쓰기</a> -->
 
+					<se:authorize access="hasRole('ROLE_USER')">
+					   <a class="btn-write button" href="noticeReg.htm">글쓰기</a> 
+					 </se:authorize>
+					
+					<!--  
 					<se:authorize access="hasRole('ROLE_USER') AND hasRole('ROLE_ADMIN')">
 					   <a class="btn-write button" href="noticeReg.htm">글쓰기</a> 
-					 </se:authorize>			
+					 </se:authorize>
+					 -->			
 					</p>
 					<p id="cur-page" class="margin-small">
 						<span class="strong">1</span> /

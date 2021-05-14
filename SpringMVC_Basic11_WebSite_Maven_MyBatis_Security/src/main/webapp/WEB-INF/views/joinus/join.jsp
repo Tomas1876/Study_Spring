@@ -28,7 +28,7 @@
 									아이디
 								</dt>
 								<dd class="join-form-data">
-									<input type="text" name="uid" />
+									<input type="text" name="userid" />
 									<input id="btnCheckUid" class="button" type="button" value="중복확인" />
 								</dd>
 							</dl>
