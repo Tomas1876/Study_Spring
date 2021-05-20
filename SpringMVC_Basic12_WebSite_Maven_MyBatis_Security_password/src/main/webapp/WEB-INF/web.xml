@@ -30,7 +30,7 @@
 		
 	<servlet-mapping>
 		<servlet-name>appServlet</servlet-name>
-		<url-pattern>*.htm</url-pattern>
+		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
  <!-- Filter 사용한 한글 처리 
   org.springframework.web.filter.CharacterEncodingFilter

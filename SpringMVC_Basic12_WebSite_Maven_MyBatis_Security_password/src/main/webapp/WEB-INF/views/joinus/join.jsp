@@ -3,6 +3,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+<script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -28,7 +30,7 @@
 									아이디
 								</dt>
 								<dd class="join-form-data">
-									<input type="text" name="userid" />
+									<input type="text" name="userid" id="userid"/>
 									<input id="btnCheckUid" class="button" type="button" value="중복확인" />
 								</dd>
 							</dl>
@@ -124,4 +126,48 @@
 		<!--공통푸터  include  -->
 		  <jsp:include page="../inc/footer.jsp" />
 	</body>
+	
+	<script type="text/javascript">
+	
+	$(document).ready(function(){
+		
+		$("#btnCheckUid").click(function(){
+			
+			console.log("클릭");
+			console.log($("#userid").val());
+			$.ajax(
+			
+					{
+						
+						url:"idcheck.do",
+						type:"POST",
+						data:{userid:$("#userid").val()},
+						success:function(data){
+							
+							console.log(data);
+							var result = data;
+							
+							if(result == "true"){
+								alert("사용 가능한 아이디입니다");
+								
+							} else{
+								alert("사용 불가능한 아이디입니다.");
+								$("#userid").val("");
+							}
+							
+						},
+						error:function(xhr){
+							console.log("에러");
+							console.log(xhr);
+						}
+						
+					}
+					
+			)
+			
+		});
+		
+	})
+	
+	</script>
 </html>

@@ -79,7 +79,7 @@
 						</tbody>
 					</table>
 					<p class="article-comment margin-small">
-				   <a class="btn-write button" href="noticeReg.htm">글쓰기</a> 
+				   <a class="btn-write button" href="noticeReg.do">글쓰기</a> 
 <%-- 					   <se:authorize access="hasRole('ROLE_USER')">
    							<a class="btn-write button" href="noticeReg.htm">글쓰기</a> 
  						</se:authorize>  --%>

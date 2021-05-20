@@ -24,12 +24,12 @@ public class MemberController {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	@RequestMapping(value="memberconfirm.htm",method=RequestMethod.GET)
+	@RequestMapping(value="memberconfirm.do",method=RequestMethod.GET)
 	public String memberConfirm(){
 		return "joinus/memberConfirm";
 	}
 	
-	@RequestMapping(value="memberconfirm.htm",method=RequestMethod.POST)
+	@RequestMapping(value="memberconfirm.do",method=RequestMethod.POST)
 	public String memberConfirm(
 			@RequestParam("password") String rawPassword,
 			Principal principal) throws ClassNotFoundException, SQLException {
@@ -48,23 +48,23 @@ public class MemberController {
 		boolean result = bCryptPasswordEncoder.matches(rawPassword, encodedPassword);
 		
 		if(result){
-			viewpage="redirect:memberupdate.htm";
+			viewpage="redirect:memberupdate.do";
 		}else{
-			viewpage="redirect:memberconfirm.htm";
+			viewpage="redirect:memberconfirm.do";
 		}
 		
 		return viewpage;
 	}
 	
 	
-	@RequestMapping(value="memberupdate.htm", method=RequestMethod.GET)
+	@RequestMapping(value="memberupdate.do", method=RequestMethod.GET)
 	public String memberUpdate(Model model, Principal principal) throws ClassNotFoundException, SQLException {
 		Member member = service.getMember(principal.getName());
 		model.addAttribute("member", member);
 		return "joinus/memberUpdate";
 	}
 	
-	@RequestMapping(value="memberupdate.htm", method=RequestMethod.POST)
+	@RequestMapping(value="memberupdate.do", method=RequestMethod.POST)
 	public String memberUpdate(Model model, Member member, Principal principal) throws ClassNotFoundException, SQLException {
 		
 		Member updatemember = service.getMember(principal.getName());
@@ -76,6 +76,6 @@ public class MemberController {
 		//암호화작업
 		updatemember.setPwd(bCryptPasswordEncoder.encode(member.getPwd()));
 		service.updateMember(updatemember);
-		return "redirect:/index.htm";
+		return "redirect:/index.do";
 	}
 }

@@ -109,16 +109,16 @@ disabled="true"  >> csrf  token 자동 생성 억제 코드
 		 <security:http  auto-config="true">
 			<security:csrf   disabled="true" />
 			<security:form-login  
-			                                       default-target-url="/index.htm"   
-												   login-page="/joinus/login.htm"    
-			                                       authentication-failure-url="/joinus/login.htm?error"  />
+			                                       default-target-url="/index.do"   
+												   login-page="/joinus/login.do"    
+			                                       authentication-failure-url="/joinus/login.do?error"  />
 			                                       
-			 <security:logout   logout-success-url="/index.htm" /> 
+			 <security:logout   logout-success-url="/index.do" /> 
 			                                      
-			<security:intercept-url pattern="/customer/*Reg.htm"   access="hasRole('ROLE_USER')"/>
+			<security:intercept-url pattern="/customer/*Reg.do"   access="hasRole('ROLE_USER')"/>
 			<security:intercept-url pattern="/admin/**"      access="hasRole('ROLE_ADMIN')" />
 			
-			<security:access-denied-handler error-page="/joinus/accessDenied.htm" />
+			<security:access-denied-handler error-page="/joinus/accessDenied.do" />
 		</security:http>
 		<security:authentication-manager>
 				<security:authentication-provider>

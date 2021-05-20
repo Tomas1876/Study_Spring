@@ -81,7 +81,7 @@
 					</div>
 					<p class="article-comment margin-small">
 						<input type="submit"   value="수정"  class="btn-save button" />
-						<a class="btn-cancel button" href="noticeDetail.htm?seq=${notice.seq}">취소</a>						
+						<a class="btn-cancel button" href="noticeDetail.do?seq=${notice.seq}">취소</a>						
 					</p>		
 					</form>					
 				</div>				

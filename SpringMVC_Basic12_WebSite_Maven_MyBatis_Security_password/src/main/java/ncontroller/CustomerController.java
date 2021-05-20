@@ -37,7 +37,7 @@ public class CustomerController {
 	}
 	
 	//글목록 조회
-	@RequestMapping("notice.htm")   //   /customer/notice.htm
+	@RequestMapping("notice.do")   //   /customer/notice.htm
 	public String notices(String pg , String f , String q , Model model) {
 		
 		List<Notice>  list = customerservice.notices(pg, f, q);
@@ -46,7 +46,7 @@ public class CustomerController {
 		
 	}
 	//글 상세 조회
-	@RequestMapping("noticeDetail.htm")
+	@RequestMapping("noticeDetail.do")
 	public String noticesDetail(String seq  , Model model) {
 
 		Notice notice =  customerservice.noticeDetail(seq);
@@ -55,13 +55,13 @@ public class CustomerController {
 
 	}
 	//글쓰기 화면 (GET)
-	@RequestMapping(value="noticeReg.htm",  method = RequestMethod.GET)
+	@RequestMapping(value="noticeReg.do",  method = RequestMethod.GET)
 	public String noticeReg() {
 			//return  "noticeReg.jsp";
 		   return "customer/noticeReg";
 	}
 	//글쓰기 처리(POST)
-	@RequestMapping(value="noticeReg.htm",  method = RequestMethod.POST)
+	@RequestMapping(value="noticeReg.do",  method = RequestMethod.POST)
 	public String noticeReg(Notice n , HttpServletRequest request , Principal principal) {
 		String url=null;
 		try {
@@ -74,7 +74,7 @@ public class CustomerController {
 	}
 	
 	//글수정하기 (화면) GET
-	@RequestMapping(value="noticeEdit.htm"  , method = RequestMethod.GET)
+	@RequestMapping(value="noticeEdit.do"  , method = RequestMethod.GET)
 	public String noticeEdit(String seq , Model model) {
 		
 		Notice notice =null;
@@ -88,7 +88,7 @@ public class CustomerController {
 	}
 	
 	//글수정 (처리) POST
-	@RequestMapping(value="noticeEdit.htm"  , method = RequestMethod.POST)
+	@RequestMapping(value="noticeEdit.do"  , method = RequestMethod.POST)
 	public String noticeEdit(Notice n , HttpServletRequest request) throws ClassNotFoundException, IOException, SQLException {
 
 		return customerservice.noticeEdit(n, request);
@@ -96,13 +96,13 @@ public class CustomerController {
 	}
 	
 	//글 삭제하기
-	@RequestMapping("noticeDel.htm") // /customer/noticeDel.htm
+	@RequestMapping("noticeDel.do") // /customer/noticeDel.htm
 	public String noticeDel(String seq) throws ClassNotFoundException, SQLException{
 			return customerservice.noticeDel(seq);
 	}
 	
 	//파일 다운로드
-	@RequestMapping("download.htm")
+	@RequestMapping("download.do")
 	public void download(String p , String f , HttpServletRequest request , HttpServletResponse response) throws IOException {
 		   customerservice.download(p, f, request, response);
 	}

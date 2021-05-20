@@ -63,7 +63,7 @@
 					--%>
 					
 					<se:authorize access="!hasRole('ROLE_USER')">
-						<li><a href="${pageContext.request.contextPath}/joinus/login.htm">로그인</a></li>
+						<li><a href="${pageContext.request.contextPath}/joinus/login.do">로그인</a></li>
 					</se:authorize>
 					<se:authentication property="name" var="LoginUser" />
 					<se:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
@@ -72,7 +72,7 @@
 					
 					<se:authorize access="!hasRole('ROLE_USER')">
 					<li>
-						<a href="${pageContext.request.contextPath}/joinus/join.htm">회원가입</a>
+						<a href="${pageContext.request.contextPath}/joinus/join.do">회원가입</a>
 					</li>
 					</se:authorize>
 				</ul>
@@ -80,11 +80,11 @@
 				<ul id="membermenu" class="clear">
 				<se:authorize access="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')">
 					<li>
-						<a href="${pageContext.request.contextPath}/joinus/memberconfirm.htm"><img src="${pageContext.request.contextPath}/images/menuMyPage.png" alt="마이페이지" /></a>
+						<a href="${pageContext.request.contextPath}/joinus/memberconfirm.do"><img src="${pageContext.request.contextPath}/images/menuMyPage.png" alt="마이페이지" /></a>
 					</li>
 				</se:authorize>
 					<li>
-						<a href="${pageContext.request.contextPath}/customer/notice.htm">
+						<a href="${pageContext.request.contextPath}/customer/notice.do">
 						<img src="${pageContext.request.contextPath}/images/menuCustomer.png" alt="고객센터" /></a>
 					</li>
 				</ul>

@@ -147,7 +147,7 @@ public class CustomerService {
 		
 		}
 
-		return "redirect:notice.htm"; // 문자열로 리턴
+		return "redirect:notice.do"; // 문자열로 리턴
 
 	}
 
@@ -155,7 +155,7 @@ public class CustomerService {
 	public String noticeDel(String seq) throws ClassNotFoundException, SQLException {
 		NoticeDao noticedao = sqlsession.getMapper(NoticeDao.class);
 		noticedao.delete(seq);
-		return "redirect:notice.htm";
+		return "redirect:notice.do";
 	}
 
 	// 글수정하기 서비스 함수 (select 화면)
@@ -195,7 +195,7 @@ public class CustomerService {
 
 		NoticeDao noticedao = sqlsession.getMapper(NoticeDao.class);
 		noticedao.update(n);
-		return "redirect:noticeDetail.htm?seq=" + n.getSeq();
+		return "redirect:noticeDetail.do?seq=" + n.getSeq();
 	}
 
 	// 파일 다운로드 서비스 함수
